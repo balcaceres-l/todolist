@@ -1,0 +1,60 @@
+<div class="registro-container">
+  <h2>Crear Cuenta</h2>
+  
+  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+    
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input 
+        id="nombre" 
+        type="text" 
+        formControlName="nombre"
+        placeholder="Tu nombre completo">
+
+      <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)" class="error-validation">
+        <span *ngIf="nombre?.errors?.['required']">El nombre es obligatorio.</span>
+        <span *ngIf="nombre?.errors?.['minLength']">Debe tener al menos 3 caracteres.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input 
+        id="email" 
+        type="email" 
+        formControlName="email"
+        placeholder="tu@correo.com">
+
+      <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="error-validation">
+        <span *ngIf="email?.errors?.['required']">El email es obligatorio.</span>
+        <span *ngIf="email?.errors?.['email']">El email no es válido.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Contraseña</label>
+      <input 
+        id="password" 
+        type="password" 
+        formControlName="password"
+        placeholder="Mínimo 6 caracteres">
+
+      <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="error-validation">
+        <span *ngIf="password?.errors?.['required']">La contraseña es obligatoria.</span>
+        <span *ngIf="password?.errors?.['minLength']">Debe tener al menos 6 caracteres.</span>
+      </div>
+    </div>
+
+    <div *ngIf="errorMensaje" class="error-backend">
+      {{ errorMensaje }}
+    </div>
+
+    <div *ngIf="exitoMensaje" class="success-message">
+      {{ exitoMensaje }}
+    </div>
+
+    <button type="submit" [disabled]="registroForm.invalid">Crear Cuenta</button>
+  </form>
+
+  <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+</div>

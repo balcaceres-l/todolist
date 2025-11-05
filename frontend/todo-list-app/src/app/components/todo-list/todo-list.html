@@ -1,0 +1,70 @@
+<div class="dashboard-container">
+  
+  <!-- Encabezado y Logout -->
+  <header class="dashboard-header">
+    <h1>
+      Bienvenido, {{ usuario?.nombre || 'Usuario' }}
+    </h1>
+    <button (click)="onLogout()" class="logout-button">Cerrar Sesión</button>
+  </header>
+
+  <!-- Mensaje de Error General -->
+  <div *ngIf="errorMensaje" class="error-backend">
+    {{ errorMensaje }}
+  </div>
+
+  <!-- Formulario para Crear Tarea -->
+  <div class="form-container card">
+    <h3>Crear Nueva Tarea</h3>
+    <form [formGroup]="todoForm" (ngSubmit)="onCrearTodo()">
+      <div class="form-group">
+        <label for="titulo">Título</label>
+        <input id="titulo" type="text" formControlName="titulo">
+        <div *ngIf="todoForm.get('titulo')?.invalid && todoForm.get('titulo')?.touched" class="error-validation">
+          El título es obligatorio.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" formControlName="descripcion"></textarea>
+        <div *ngIf="todoForm.get('descripcion')?.invalid && todoForm.get('descripcion')?.touched" class="error-validation">
+          La descripción es obligatoria.
+        </div>
+      </div>
+      <button type="submit" [disabled]="todoForm.invalid">Crear Tarea</button>
+    </form>
+  </div>
+
+  <!-- Lista de Tareas -->
+  <div class="todo-list">
+    <h2>Mis Tareas</h2>
+    
+    <!-- Mensaje si no hay tareas -->
+    <div *ngIf="todos.length === 0; else lista">
+      <p>No tienes tareas pendientes. ¡Crea una!</p>
+    </div>
+
+    <!-- Contenedor de las tareas -->
+    <ng-template #lista>
+      <div class="todo-card" *ngFor="let todo of todos">
+        <h3>{{ todo.titulo }}</h3>
+        <p>{{ todo.descripcion }}</p>
+        
+        <div class="todo-actions">
+          <!-- Dropdown para cambiar estado -->
+          <select [ngModel]="todo.estado" (change)="onCambiarEstado(todo.id, $event)">
+            <option *ngFor="let estado of estadosPosibles" [value]="estado">
+              {{ estado | titlecase }} <!-- titlecase Pone la primera letra en mayúscula -->
+            </option>
+          </select>
+          
+          <!-- Botón de eliminar -->
+          <button (click)="onEliminarTodo(todo.id)" class="delete-button">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+</div>
